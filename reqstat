@@ -69,7 +69,7 @@ function output_stats($from, $to, $freq) {
 }
 
 function main($argc, $argv) {
-  $server = "ec2-50-17-172-189.compute-1.amazonaws.com";
+  $server = "localhost";
   $frequency = 5;
   $duration = 12;
   if ($argc > 1) $frequency = $argv[1];
