@@ -39,9 +39,14 @@ function gather_stats($m) {
 }
 
 function output_header() {
+  ob_start();
+  ob_implicit_flush(true);
   print 'epoch,time,rps,avg_req,last,%comp' ;
   print ',---,threshold,exceed,last_excess';
   print NEWLINE;
+  ob_flush();
+
+  return;
 }
 
 function output_stats($from, $to, $freq) {
@@ -65,6 +70,8 @@ function output_stats($from, $to, $freq) {
   print $to['now']. COMMA . date('His',$to['now']). COMMA . $rps . COMMA . $avg_latency . COMMA . $to['last_request_time'] . COMMA . $pct_comp;
   print COMMA . '---' . COMMA .  $to['request_threshold'] . COMMA . $excess . COMMA . $to['last_excess_request_time'];
   print NEWLINE;
+  ob_flush();
+
   return;
 }
 
@@ -77,6 +84,7 @@ function main($argc, $argv) {
 
   $m = configure_memcached($server);
   iteration($frequency, $duration, $m);
+  ob_end_flush();
   return;
 }
 
