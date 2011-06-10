@@ -1,6 +1,0 @@
-/**
- *  Name:    reqstat_reset.php
- *  Purpose: Reset memcached statistics 
- *  Author:  Ronald Bradford  http://ronaldbradford.com
- *  Website: https://github.com/ronaldbradford/reqstat
- */
