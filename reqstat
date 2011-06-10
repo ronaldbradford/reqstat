@@ -70,7 +70,7 @@ function output_stats($from, $to, $freq) {
 function main($argc, $argv) {
   $server = "localhost"
   $frequency = 5;
-  $duration = 10;
+  $duration = 12;
   if ($argc > 1) $frequency = $argv[1];
   if ($argc > 2) $duration = $argv[2];
 
