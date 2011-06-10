@@ -1,3 +1,4 @@
+<?php
 /**
  *  Name:    reqstat_debug.php
  *  Purpose: Debug memcached statistics 
@@ -5,7 +6,6 @@
  *  Website: https://github.com/ronaldbradford/reqstat
  */
 
-<?php
 $m = new Memcached();
 $m->addServer('localhost',11211);
 $requests =  $m->get('requests');

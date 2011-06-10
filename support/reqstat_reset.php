@@ -1,10 +1,10 @@
+<?php
 /**
  *  Name:    reqstat_reset.php
  *  Purpose: Reset memcached statistics 
  *  Author:  Ronald Bradford  http://ronaldbradford.com
  *  Website: https://github.com/ronaldbradford/reqstat
  */
-<?php
 $m = new Memcached();
 $m->addServer('localhost',11211);
 $m->set('requests',0);
