@@ -1,0 +1,84 @@
+#!/usr/bin/php
+#  
+# Name:     reqstat
+# Purpose:  Report Request Statistics
+# Author:   Ronald Bradford  http://ronaldbradford.com
+# Website:  https://github.com/ronaldbradford/reqstat
+<?php
+
+const COMMA = ',';
+const NEWLINE ="\n";
+
+function configure_memcached($server) {
+  $m = new Memcached();
+  $m->addServer($server, 11211);
+  return $m;
+}
+
+function iteration($frequency, $duration, $m) {
+  $count =0;
+  $last_stats = array();
+  output_header();
+  while  ($duration == 0 || $count <= $duration) {
+    $stats = gather_stats($m);
+    output_stats($last_stats, $stats, $frequency);
+    $last_stats = $stats;
+    sleep($frequency);
+    $count += 1;
+  }
+
+  return;
+}
+
+function gather_stats($m) {
+  $stats = $m->getMulti(array('completed_requests','requests','total_request_time','last_request_time','request_threshold','excess_requests','last_excess_request_time'));
+  $stats['now'] = time();
+  return $stats;
+
+}
+
+function output_header() {
+  print 'epoch,time,rps,avg_req,last,%comp' ;
+  print ',---,threshold,exceed,last_excess';
+  print NEWLINE;
+}
+
+function output_stats($from, $to, $freq) {
+  if (empty($from)) return;
+  $rps = round(($to['completed_requests'] - $from['completed_requests']) / $freq);
+
+  // Catch divide by zero
+  if ($rps == 0 ) {
+    $avg_latency = '';
+  } else {
+    $avg_latency =  number_format(($to['total_request_time'] - $from['total_request_time']) / $freq / $rps,2,'.','');
+  }
+  $new_requests = $to['requests'] - $from['requests'];
+  if ($new_requests == 0 ) {
+    $pct_comp = '';
+  } else { 
+    $pct_comp  =  round(( ($to['completed_requests'] - $from['completed_requests']) / $new_requests ) * 100.0);
+  }
+
+  $excess = round(($to['excess_requests'] - $from['excess_requests']) / $freq);
+  print $to['now']. COMMA . date('His',$to['now']). COMMA . $rps . COMMA . $avg_latency . COMMA . $to['last_request_time'] . COMMA . $pct_comp;
+  print COMMA . '---' . COMMA .  $to['request_threshold'] . COMMA . $excess . COMMA . $to['last_excess_request_time'];
+  print NEWLINE;
+  return;
+}
+
+function main($argc, $argv) {
+  $server = "localhost"
+  $frequency = 5;
+  $duration = 10;
+  if ($argc > 1) $frequency = $argv[1];
+  if ($argc > 2) $duration = $argv[2];
+
+  $m = configure_memcached($server);
+  iteration($frequency, $duration, $m);
+  return;
+}
+
+main($argc, $argv);
+
+?>

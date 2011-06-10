@@ -1,0 +1,91 @@
+NAME
+  reqstat - Report Request Statistics
+
+SYNOPSIS:  
+
+  ./reqstat [delay] [count]
+
+DESCRIPTION
+
+
+CONFIGURATION
+
+  reqstat processes statistics gathered by your application and stored in memcached. The following is 
+  an example for PHP code.
+
+  Add at the beginning of your HTTP requests add the following code:
+
+  <?php
+  $_generate_start = microtime(true);
+  $m = new Memcached(); 
+  $m->addServer('localhost',11211); 
+  $m->increment('requests');
+  ?>
+
+
+  Add at the end of your HTTP requests (ie. just before the </body></html> tag)
+
+  <?php
+  $m->increment('completed_requests');
+  $time = ceil((microtime(true) - $_generate_start)*1000);
+  $m->increment('total_request_time',$time);
+  $m->set('last_request_time',$time);
+  $threshold = $m->get('request_threshold');
+  if (empty($threshold)) $threshold = 100;
+  if ($time > $threshold) {
+    $m->increment('excess_requests');
+    $m->set('last_excess_request_time',$time);
+  }
+  ?>
+  
+  If you would also like to embed your page generation time with your HTTP response, 
+  add the following just before the </body> tag 
+
+  <?php echo '<div id="_generated">'.  $time .'</div>'; ?>
+
+  In your CSS add the following
+  #_generated  { display: none; }
+
+PRE REQUISITES
+
+  reqstat requires a local instance of memcached installed and your application code to record statistics.
+
+  On Ubuntu:
+  $ sudo apt-get install -y memcached libmemcached2 php5-memcached
+
+  Confirmation steps:
+  1. Packages installed
+
+  $ sudo dpkg -l | grep mem
+  ii  libmemcached2                     0.31-1                            A C and C++ client library to the memcached
+  ii  memcached                         1.4.2-1ubuntu3                    A high-performance memory object caching sys
+  ii  memtest86+                        4.00-2ubuntu3                     thorough real-mode memory tester
+  ii  php5-memcache                     3.0.4-2build1                     memcache extension module for PHP5
+  ii  php5-memcached                    1.0.0-1build1                     memcached extension module for PHP5
+
+  2. PHP Memcached configured
+  $ echo "<?phpinfo()?>" | php | grep memcached
+
+  /etc/php5/cli/conf.d/memcached.ini,
+  memcached
+  memcached support => enabled
+  libmemcached version => 0.31
+
+  3. Memcached running
+  $ ps -ef | grep memcached
+  nobody   24304     1  0 03:39 ?        00:00:00 /usr/bin/memcached -m 64 -p 11211 -u nobody -l 127.0.0.1
+
+  4. Configured on system startup
+  $ ls -l /etc/rc3.d/*memcached
+  lrwxrwxrwx 1 root root 19 2011-06-03 03:39 /etc/rc3.d/S20memcached -> ../init.d/memcached
+
+
+FUTURE FEATURES
+  Support getting statistics from remote servers
+
+SEE ALSO
+  memcached (http://memcached.org/), php (http://php.net)
+
+AUTHORS
+  Written by Ronald Bradford <me@ronaldbradford.com>
+
