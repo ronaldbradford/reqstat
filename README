@@ -1,4 +1,5 @@
 NAME
+
   reqstat - Report Request Statistics
 
 SYNOPSIS:  
@@ -21,12 +22,13 @@ DESCRIPTION
 
   reqstat also records excess threshold statistics
 
-  threshold - A pre-configured and customized millisecond threshold 
+  threshold - A pre-configured and customized millisecond threshold  (defaults to 150)
   exceed - The number of request per second that exceed the threshold
   last_excess - The last recorded total request time in milliseconds that exceeded the threshold
    
 
-OPTION 
+OPTIONS
+
   reqstat requires not arguments work by default. If no arguments are provided the output will run 
   1 minute (60 seconds).
 
@@ -74,7 +76,7 @@ CONFIGURATION
   $m->increment('total_request_time',$time);
   $m->set('last_request_time',$time);
   $threshold = $m->get('request_threshold');
-  if (empty($threshold)) $threshold = 100;
+  if (empty($threshold)) $threshold = 150;
   if ($time > $threshold) {
     $m->increment('excess_requests');
     $m->set('last_excess_request_time',$time);
@@ -124,11 +126,13 @@ PRE REQUISITES
 
 
 FUTURE FEATURES
+
   Support getting statistics from remote servers
 
 SEE ALSO
+
   memcached (http://memcached.org/), php (http://php.net)
 
 AUTHORS
-  Written by Ronald Bradford <me@ronaldbradford.com>
 
+  Written by Ronald Bradford <me@ronaldbradford.com>
