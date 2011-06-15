@@ -13,6 +13,11 @@ const NEWLINE ="\n";
 function configure_memcached($server) {
   $m = new Memcached();
   $m->addServer($server, 11211);
+  $rc = $m->getResultCode();
+  if ($rc != Memcached::RES_SUCCESS) {
+    print "ERROR:  [$rc] Unable to add $server to memcached list\n";
+    exit(1);
+  }
   return $m;
 }
 
@@ -33,6 +38,11 @@ function iteration($frequency, $duration, $m) {
 
 function gather_stats($m) {
   $stats = $m->getMulti(array('completed_requests','requests','total_request_time','last_request_time','request_threshold','excess_requests','last_excess_request_time'));
+  $rc = $m->getResultCode();
+  if ($rc != Memcached::RES_SUCCESS) {
+    print "ERROR:  [$rc] Unable to correct obtain memcached status\n";
+    exit(2);
+  }
   $stats['now'] = time();
   return $stats;
 
