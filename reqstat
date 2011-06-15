@@ -86,11 +86,13 @@ function output_stats($from, $to, $freq) {
 }
 
 function main($argc, $argv) {
-  $server = "localhost";
   $frequency = 5;
   $duration = 12;
+  $server = "localhost";
+
   if ($argc > 1) $frequency = $argv[1];
   if ($argc > 2) $duration = $argv[2];
+  if ($argc > 3) $server = $argv[3];
 
   $m = configure_memcached($server);
   iteration($frequency, $duration, $m);
