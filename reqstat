@@ -18,6 +18,12 @@ function configure_memcached($server) {
     print "ERROR:  [$rc] Unable to add $server to memcached list\n";
     exit(1);
   }
+  $m->setOption(Memcached::OPT_PREFIX_KEY, 'reqstat:');
+  $rc = $m->getResultCode();
+  if ($rc != Memcached::RES_SUCCESS) {
+    print "ERROR:  [$rc] Unable to set memcached option\n";
+    exit(1);
+  }
   return $m;
 }
 

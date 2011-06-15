@@ -4,7 +4,7 @@ NAME
 
 SYNOPSIS:  
 
-  ./reqstat [delay] [count]
+  ./reqstat [delay] [count] [hostname]
 
 DESCRIPTION
 
@@ -37,7 +37,7 @@ OPTIONS
   1 minute (60 seconds).
 
   delay is the delay between updates in seconds.  If no delay is specified this defaults to 5
-  count is the number of updates.  If no count is specified this defaults to 12
+  count is the number of updates.  If no count is specified this defaults to 12. Set to 0 for infinite.
 
 
 EXAMPLES
@@ -68,6 +68,7 @@ CONFIGURATION
   $_generate_start = microtime(true);
   $m = new Memcached(); 
   $m->addServer('localhost',11211); 
+  $m->setOption(Memcached::OPT_PREFIX_KEY, 'reqstat:');
   $m->increment('requests');
   ?>
 
@@ -131,7 +132,7 @@ PRE REQUISITES
 
 FUTURE FEATURES
 
-  Support getting statistics from remote servers
+  TBD
 
 SEE ALSO
 
