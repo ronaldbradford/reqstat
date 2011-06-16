@@ -1,0 +1,11 @@
+
+
+1. Get Flot
+
+# NOTE: This version is current as at June 9, 2011
+
+$ wget http://flot.googlecode.com/files/flot-0.7.tar.gz
+$ tar xfz flot-0.7.tar.gz
+$ rm flot-*.tar.gz
+
+

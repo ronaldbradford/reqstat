@@ -8,6 +8,7 @@
 
 $m = new Memcached();
 $m->addServer('localhost',11211);
+$m->setOption(Memcached::OPT_PREFIX_KEY, 'reqstat:');
 $requests =  $m->get('requests');
 $completed_requests =  $m->get('completed_requests');
 print "requests=".$requests . "\n";
@@ -20,4 +21,7 @@ print "request_threshold=".$m->get('request_threshold'). "\n";
 print "excess_requests=".$m->get('excess_requests') . "\n";
 print "last_request_time=".$m->get('last_request_time') . "\n";
 print "last_excess_request_time=".$m->get('last_excess_request_time') . "\n";
+
+print "variables=".$m->get('variables'). "\n";
+print "version=".$m->get('version'). "\n";
 ?>
