@@ -59,7 +59,6 @@ function get_variables($m) {
 }
 
 function gather_stats($m, $variables) {
-  //$stats = $m->getMulti(array('completed_requests','requests','total_request_time','last_request_time','request_threshold','excess_requests','last_excess_request_time'));
   $stats = $m->getMulti($variables);
   $rc = $m->getResultCode();
   if ($rc != Memcached::RES_SUCCESS) {
