@@ -20,7 +20,7 @@ DESCRIPTION
   last - The last recorded total request time in milliseconds
   %comp - The percentage of requests completed
 
-  reqstat also records excess threshold statistics
+  reqstat also records excess threshold statistics above a given time
 
   threshold - A pre-configured and customized millisecond threshold  (defaults to 150)
   exceed - The number of request per second that exceed the threshold
@@ -33,11 +33,12 @@ DESCRIPTION
 
 OPTIONS
 
-  reqstat requires not arguments work by default. If no arguments are provided the output will run 
+  reqstat requires no arguments to work by default. If no arguments are provided the output will run 
   1 minute (60 seconds).
 
   delay is the delay between updates in seconds.  If no delay is specified this defaults to 5
   count is the number of updates.  If no count is specified this defaults to 12. Set to 0 for infinite.
+  servername.  If no value is specified this defaults to localhost.
 
 
 EXAMPLES
