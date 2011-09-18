@@ -24,4 +24,5 @@ print "last_excess_request_time=".$m->get('last_excess_request_time') . "\n";
 
 print "variables=".$m->get('variables'). "\n";
 print "version=".$m->get('version'). "\n";
+print "loadavg=".$m->get('loadavg'). "\n";
 ?>
