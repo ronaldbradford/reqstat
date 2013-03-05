@@ -103,25 +103,28 @@ PRE REQUISITES
   reqstat requires a local instance of memcached installed and your application code to record statistics.
 
   On Ubuntu:
-  $ sudo apt-get install -y memcached libmemcached2 php5-memcached
+  $ sudo apt-get install -y memcached libmemcached-tools php5-memcached
 
   Confirmation steps:
-  1. Packages installed
+  1. Packages installed (e.g. Ubuntu 12.04 LTS)
 
   $ sudo dpkg -l | grep mem
-  ii  libmemcached2                     0.31-1                            A C and C++ client library to the memcached
-  ii  memcached                         1.4.2-1ubuntu3                    A high-performance memory object caching sys
-  ii  memtest86+                        4.00-2ubuntu3                     thorough real-mode memory tester
-  ii  php5-memcache                     3.0.4-2build1                     memcache extension module for PHP5
-  ii  php5-memcached                    1.0.0-1build1                     memcached extension module for PHP5
+  ii  libmemcached-tools       0.44-1.1build1         Commandline tools for talking to memcached via libmemcached
+  ii  libmemcached6            0.44-1.1build1         A C and C++ client library to the memcached server
+  ii  memcached                1.4.13-0ubuntu2        A high-performance memory object caching system
+  ii  memtest86+               4.20-1.1ubuntu1        thorough real-mode memory tester
+  ii  php5-memcached           1.0.2-2                memcached extension module for PHP5, uses libmemcached
+
+  NOTE: On older distros, you may need to install libmemcached2 instead of libmemcached-tools
 
   2. PHP Memcached configured
-  $ echo "<?phpinfo()?>" | php | grep memcached
+  $ php -i | grep memcached
 
   /etc/php5/cli/conf.d/memcached.ini,
   memcached
   memcached support => enabled
-  libmemcached version => 0.31
+  libmemcached version => 0.44
+  Registered save handlers => files user memcached 
 
   3. Memcached running
   $ ps -ef | grep memcached
